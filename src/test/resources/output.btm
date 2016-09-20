@@ -1,0 +1,48 @@
+###################################################################
+# TASK 1 SOLUTION RULES	
+#
+# You may run the application after building it using maven
+# just by typing this command in the project directory
+# 
+#  bmjava.sh -l src/test/resources/output.btm \
+#		 -cp target/<APPLICATION-JAR> \
+#		 org.jknetl.byteman.tutorial.Main 50 3
+#
+# The first arguments means counter max value (50) and the second argument (3) means
+# number of threads.
+#
+# You may start the rule using standard java command but you need
+# to pass byteman agent to it (see Byteman's official tutorial part 1
+# for more details.
+
+###################################################################
+
+# simple rule which output information about the starting thread
+RULE trace thread start
+CLASS ^java.lang.Thread
+METHOD start()
+AT ENTRY
+IF true
+DO traceln(" ===> Starting thread: " + $0.getName())
+ENDRULE
+
+
+# simple rule which output information about the stopping thread
+RULE trace thread stop
+CLASS ^java.lang.Thread
+METHOD run()
+AT EXIT
+IF true
+DO traceln(" ===> Stopping thread: " + $0.getName())
+ENDRULE
+
+# note that you must enable debug mode using org.jboss.byteman.debug system property
+# otherwise the debug statements won't be visible
+# rule which uses debug output to print whenever thread increments a counter
+RULE increment counter
+CLASS org.jknetl.byteman.tutorial.Counter
+METHOD incrementByOne()
+AT EXIT
+IF true
+DO debug(Thread.currentThread().getName() + " has incremented counter to new value: " + $0.i)
+ENDRULE
