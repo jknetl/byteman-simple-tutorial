@@ -1,0 +1,35 @@
+####################################################
+#  Solution to task 4 (synchronize threads after increment)
+#
+#  Run TasksTest to execute this rule
+####################################################
+
+# This rule creates a counter which indicates how many threads will be running
+RULE create thread counter
+CLASS App
+METHOD startIncrementing()
+AT LINE 51
+IF true
+DO debug("Creating counter: " + $counter);
+   createCounter($counter, $0.numOfThreads)
+ENDRULE
+
+
+# create meeting point for the given number of thread which can be read using a counter from previous rule
+RULE create meeting point (rendezvous)
+CLASS Counter
+METHOD increment()
+BIND numOfThreads = readCounter($0);
+IF NOT flagged($0)
+DO createRendezvous($0, numOfThreads, true);
+   flag($0)
+ENDRULE 
+
+# meet other threads after incrementing
+RULE meet with other threads
+CLASS IncrementWorker
+METHOD run()
+AT LINE 29
+IF true
+DO rendezvous($0.counter) 
+ENDRULE
