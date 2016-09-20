@@ -1,0 +1,15 @@
+####################################################
+#  Solution to task 3 (increment counter twice)
+#
+#  Run TasksTest to execute this rule
+####################################################
+
+
+# Invoke incrementByOne() once more after it was incremented
+RULE increment twice consecutively
+CLASS Counter
+METHOD increment()
+AFTER INVOKE incrementByOne()
+IF true
+DO $0.incrementByOne()
+ENDRULE

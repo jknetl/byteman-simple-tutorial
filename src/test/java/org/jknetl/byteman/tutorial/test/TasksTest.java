@@ -29,4 +29,17 @@ public class TasksTest {
 		final App app = new App(30, 2);
 		app.startIncrementing();
 	}
+
+
+	/**
+	 * This is not the test in fact. I used the test to solve this tasks because it is more simple
+	 * then to run the rule using BMUnit than manually using the java command! But the test result is
+	 * irrelevant (in fact it should always succeed, even if the rule is wrong).
+	 */
+	@Test
+	@BMScript("increment-twice.btm")
+	public void incrementTwiceTest() {
+		final App app = new App(30, 2);
+		app.startIncrementing();
+	}
 }
