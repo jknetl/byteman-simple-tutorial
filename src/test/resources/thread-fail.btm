@@ -1,0 +1,16 @@
+####################################################
+#  Solution to task 2 (making a thread fail)
+#
+#  Run TasksTest to execute this rule
+####################################################
+
+
+# Rule which at the end of increment() call checks whether the counter value is 10. If it is then it throws exception
+# the 
+RULE fail thread which increment to 10
+CLASS Counter
+METHOD increment()
+AT EXIT
+IF $0.i == 10
+DO throw new RuntimeException("Thread " + Thread.currentThread().getName() + " failed because of byteman injected exception")
+ENDRULE
